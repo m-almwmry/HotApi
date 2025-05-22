@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F8T6FGH8XE"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-F8T6FGH8XE');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة الأسعار</title>
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --calculator-bg: #ffffff;
+            --text-color: #2d3436;
+            --button-bg: #00b894;
+            --border-color: #dfe6e9;
+            --secondary-button: #636e72;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --calculator-bg: #2d2d2d;
+            --text-color: #ffffff;
+            --button-bg: #00a383;
+            --border-color: #404040;
+            --secondary-button: #7f8c8d;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .calculator {
+            background-color: var(--calculator-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 320px;
+            margin-top: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .price-type-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .price-type-button {
+            flex: 1;
+            background-color: var(--secondary-button);
+            padding: 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            text-align: center;
+        }
+
+        .price-options {
+            position: absolute;
+            background: var(--calculator-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 100;
+            display: none;
+            width: 100%;
+            left: 0;
+        }
+
+        .price-option {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s ease;
+        }
+
+        .price-option:hover {
+            background: var(--bg-color);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .input-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            background-color: var(--calculator-bg);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #74b9ff;
+        }
+
+        .result-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .result-box {
+            background-color: var(--bg-color);
+            padding: 1rem;
+            border-radius: 6px;
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        button {
+            background-color: var(--button-bg);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .secondary-button {
+            background-color: var(--secondary-button);
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        button:hover {
+            filter: brightness(110%);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            background: var(--button-bg);
+            border: none;
+            color: white;
+        }
+
+        .footer {
+            text-align: center;
+            margin: 2rem 0;
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+
+        .store-button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 25px;
+            background: var(--button-bg);
+            color: white;
+            border-radius: 30px;
+            margin: 1rem auto;
+            width: fit-content;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s ease;
+        }
+
+        .reset-button {
+            background-color: #d63031;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        @keyframes fade {
+            0% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @keyframes slideIn {
+            from { top: -50px; }
+            to { top: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+    
+    <div class="calculator">
+        <h1>اسعار الفئات تابع لترند كارد</h1>
+        
+        <!-- أزرار أنواع الأسعار -->
+        <div class="price-type-buttons">
+            <div class="price-type-button" onclick="showPriceOptions('cost', this)">
+                
+                <!-- اسعار التكلفة -->
+                سعر التكلفة
+                <div class="price-options" id="costOptions">
+                    <div class="price-option" onclick="setPrice('0.00010096388')">يوهو</div>
+                    <div class="price-option" onclick="setPrice('0.00008951234')">يويو</div>
+                </div>
+            </div>
+            <div class="price-type-button" onclick="showPriceOptions('sell', this)">
+        <!-- اسعار البيع  -->        
+              
+                
+                سعر البيع
+                
+                
+                
+                
+                <div class="price-options" id="sellOptions">
+                    <div class="price-option" onclick="setPrice('0.0011209375')">زينا لايف ✅</div>
+<div class="price-option" onclick="setPrice('0.00080441')">يويو ✅</div>
+
+<div class="price-option" onclick="setPrice('0.01910714')">✅لايكي مباشر ارفع 3%</div>
+<div class="price-option" onclick="setPrice('0.0009639553')">✅بيلا شات</div>
+<div class="price-option" onclick="setPrice('0.0008751071')">✅تالك تالك</div>
+<div class="price-option" onclick="setPrice('0.000105754199')">✅ يوهو</div>
+<div class="price-option" onclick="setPrice('0.0001151974')">✅ جواكر ارفع 4.5%</div>
+<div class="price-option" onclick="setPrice('0')">ايمو غير متوفر⛔</div>
+<div class="price-option" onclick="setPrice('0.0018763214')">سول شيل</div>
+<div class="price-option" onclick="setPrice('0.0008139642')">ازال في فوارق</div>
+<div class="price-option" onclick="setPrice('0')">يلا لايف ⛔ محذوف</div>
+<div class="price-option" onclick="setPrice('0.0010375178')">هوا Hawa</div>
+<div class="price-option" onclick="setPrice('0.001099768868')">هوا Hawa زيادة +6%</div>
+<div class="price-option" onclick="setPrice('0.00108981935')">بارتي ستار</div>
+<div class="price-option" onclick="setPrice('0')">لايف يو ⛔ غير متوفر</div>
+<div class="price-option" onclick="setPrice('0.0007675714')">Oohla - اوهلا</div>
+<div class="price-option" onclick="setPrice('0.001284')">ليجو لايف</div>
+<div class="price-option" onclick="setPrice('0.0012247678')">بينمو - Binmo</div>
+<div class="price-option" onclick="setPrice('0.0005335')">لامي - lame</div>
+<div class="price-option" onclick="setPrice('0.007021875')">سوبر لايف</div>
+<div class="price-option" onclick="setPrice('0.0003983839')">اهلا - Ahlan</div>
+<div class="price-option" onclick="setPrice('0.0010118428')">هاكي شات</div>
+<div class="price-option" onclick="setPrice('0.001052316512')">هاكي ترند +4%</div>
+<div class="price-option" onclick="setPrice('0.0003964732')">كيو Kiyo</div>
+<div class="price-option" onclick="setPrice('0.0189')">بيجو لايف</div>
+<div class="price-option" onclick="setPrice('0.0001068224')">بوبو لايف Poppo</div>
+<div class="price-option" onclick="setPrice('0.0010028571')">ايومي</div>
+<div class="price-option" onclick="setPrice('0.0010279285275')">ايومي ترند+ 2.5%</div>
+<div class="price-option" onclick="setPrice('0.0120623392')">كواي +7%✅</div>
+<div class="price-option" onclick="setPrice('0.00036125447')">لاما شات+7%✅ 0.945</div>
+<div class="price-option" onclick="setPrice('0.0011393210')">كفو +8% ✅ 0.935</div>
+<div class="price-option" onclick="setPrice('0')">تانجو ⛔ غير متوفر</div>
+<div class="price-option" onclick="setPrice('0.0004767232')">هابي +7%✅</div>
+<div class="price-option" onclick="setPrice('0.00120375')">سكاي +7% ✅ 0.945</div>
+<div class="price-option" onclick="setPrice('0.0152857142')">اب لايف +7%✅ 0.945</div>
+<div class="price-option" onclick="setPrice('0.0001569857')">اولاميت +8% 0.94</div>
+
+
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="price">السعر الوحدة</label>
+            <input type="number" id="price" step="0.00000000001" placeholder="أدخل السعر هنا">
+        </div>
+
+        <div class="input-group">
+            <label for="quantity">الكمية</label>
+            <div class="input-container">
+                <input type="number" id="quantity" placeholder="أدخل الكمية هنا">
+                <div class="input-buttons">
+                    <button class="secondary-button" onclick="pasteQuantity()">لصق</button>
+                    <button class="secondary-button" onclick="clearQuantity()">تفريغ</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-group">
+            <div class="result-box">
+                <span id="total">0.000</span>
+                <button onclick="copyResult()">نسخ</button>
+            </div>
+            
+            <div class="result-box">
+                <span id="total-after-multiply">0.000</span>
+                <button onclick="copyMultipliedResult()">نسخ ×560</button>
+            </div>
+        </div>
+
+        <button class="reset-button" onclick="resetAll()">إعادة تعيين الكل</button>
+    </div>
+
+    <a href="https://my-app.trend-vip.com/" target="_blank" class="store-button">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+            <path d="M3 20.5v-17c0-.59.34-1.11.84-1.35L13.69 12l-9.85 9.85c-.5-.25-.84-.76-.84-1.35zm13.81-5.38L6.05 21.34l8.49-8.49 2.27 2.27zm3.35-4.31c.34.27.59.69.59 1.19 0 .51-.25.92-.58 1.19l-2.89 1.69-2.97-2.97 2.97-2.97 2.88 1.67zm-15.4-8.4L16.86 12 13 15.88 4.76 7.64l5.8-5.8z"/>
+        </svg>
+        تنزيل التطبيق
+    </a>
+
+    <div class="footer">
+        © حقوق الطبع محفوظة 2025
+    </div>
+
+    <script>
+        const priceInput = document.getElementById('price');
+        const quantityInput = document.getElementById('quantity');
+        const totalSpan = document.getElementById('total');
+        const totalAfterMultiplySpan = document.getElementById('total-after-multiply');
+        let previousTotal = 0;
+
+        // تبديل الوضع الليلي
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            const themeToggle = document.querySelector('.theme-toggle');
+            if (document.body.classList.contains('dark')) {
+                themeToggle.textContent = '☀️';
+                document.body.setAttribute('data-theme', 'dark');
+            } else {
+                themeToggle.textContent = '🌙';
+                document.body.removeAttribute('data-theme');
+            }
+        }
+
+        // إظهار خيارات الأسعار
+        function showPriceOptions(type, button) {
+            document.querySelectorAll('.price-options').forEach(menu => menu.style.display = 'none');
+            const options = document.getElementById(`${type}Options`);
+            options.style.display = 'block';
+            
+            setTimeout(() => {
+                document.addEventListener('click', function closeMenu(e) {
+                    if (!button.contains(e.target)) {
+                        options.style.display = 'none';
+                        document.removeEventListener('click', closeMenu);
+                    }
+                });
+            }, 0);
+        }
+
+        // تعيين السعر المحدد
+        function setPrice(value) {
+            priceInput.value = value;
+            calculateTotal();
+            showMessage('تم تعيين السعر بنجاح');
+        }
+
+        // لصق الكمية
+        async function pasteQuantity() {
+            try {
+                const text = await navigator.clipboard.readText();
+                if (!isNaN(text)) {
+                    quantityInput.value = text;
+                    calculateTotal();
+                }
+            } catch (err) {
+                showMessage('فشل في لصق البيانات');
+            }
+        }
+
+        // تفريغ حقل الكمية
+        function clearQuantity() {
+            quantityInput.value = '';
+            calculateTotal();
+        }
+
+        // الحسابات التلقائية
+        [priceInput, quantityInput].forEach(input => {
+            input.addEventListener('input', calculateTotal);
+        });
+
+        function calculateTotal() {
+            const price = parseFloat(priceInput.value) || 0;
+            const quantity = parseFloat(quantityInput.value) || 0;
+            const total = price * quantity;
+
+            totalSpan.textContent = formatNumber(total);
+            totalAfterMultiplySpan.textContent = formatNumber(total * 560);
+            saveToLocalStorage();
+        }
+
+        // تنسيق الأرقام
+        function formatNumber(num) {
+            let formatted = num.toFixed(8);
+            formatted = parseFloat(formatted).toString();
+            const parts = formatted.split('.');
+            parts[1] = (parts[1] || '').padEnd(8, '0').slice(0,8);
+            return parts.join('.');
+        }
+
+        // نظام النسخ
+        async function copyResult() {
+            await copyToClipboard(totalSpan.textContent);
+        }
+
+        async function copyMultipliedResult() {
+            await copyToClipboard(totalAfterMultiplySpan.textContent);
+        }
+
+        async function copyToClipboard(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                showMessage('تم النسخ بنجاح!');
+            } catch (err) {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showMessage('تم النسخ بنجاح!');
+            }
+        }
+
+        // نظام الإشعارات
+        function showMessage(msg) {
+            const div = document.createElement('div');
+            div.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: var(--button-bg);
+                color: white;
+                padding: 10px 20px;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                animation: slideIn 0.3s, fade 2s 1.7s forwards;
+                z-index: 1000;
+            `;
+            div.textContent = msg;
+            document.body.appendChild(div);
+            setTimeout(() => div.remove(), 2000);
+        }
+
+        // إعادة التعيين
+        function resetAll() {
+            priceInput.value = '';
+            quantityInput.value = '';
+            calculateTotal();
+            showMessage('تم إعادة التعيين بنجاح');
+        }
+
+        // حفظ البيانات
+        function saveToLocalStorage() {
+            localStorage.setItem('calculatorData', JSON.stringify({
+                price: priceInput.value,
+                quantity: quantityInput.value
+            }));
+        }
+
+        // تحميل البيانات
+        function loadFromLocalStorage() {
+            const data = JSON.parse(localStorage.getItem('calculatorData'));
+            if (data) {
+                priceInput.value = data.price;
+                quantityInput.value = data.quantity;
+                calculateTotal();
+            }
+        }
+
+        window.addEventListener('load', loadFromLocalStorage);
+    </script>
+</body>
+</html>
+
+
+<!--
+ لإضافة المزيد من الخيارات في القوائم المنسدلة، يمكنك إضافة عناصر جديدة داخل الـ divs التالية:
+
+costOptions لقائمة سعر التكلفة
+
+sellOptions لقائمة سعر البيع
+
+باستخدام نفس النمط:
+ -->
+
+
+<!--  
+<div class="price-option" onclick="setPrice('القيمة_الجديدة')">اسم الخيار</div>
+-->
+
+
+<!--  -->
+
+
+<!--  -->
+
+
+
+
